@@ -130,10 +130,19 @@ function RemoveReport
 
 foreach ($report in Get-RubrikReport -Type Custom)
     {
+    
+    if ([bool]($report.PSobject.Properties.Name -match "reportName"))
+    {
+        $report_name = $report.reportName
+    } 
+    elseif ([bool]($report.PSobject.Properties.Name -match "name"))
+    {
+        $report_name = $report.name
+    }
 
-    if ($report.reportName -notlike "*DND*")
+    if ($report_name -notlike "*DND*")
         {
-        Write-Verbose -Message "Removing report $($report.reportName)" -Verbose
+        Write-Verbose -Message "Removing report $($report_name)" -Verbose
         $report | Remove-RubrikReport -Confirm:$false
         }
     }
